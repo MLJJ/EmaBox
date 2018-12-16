@@ -1,0 +1,16 @@
+
+<h3 class="titlePages">Compartidos conmigo</h3>
+
+<div id="divContainerFiles" class="mdl-grid">
+<% @sharedocuments.each do |sharedocument| %>
+  <div class="divContainerFile mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+    <img src="" class="imgFile"/>
+    <h6 class="nameFile"><%= sharedocument.document.fileName %></h6>
+    <span class="elementHide" id="fileId"><%= sharedocument.document.id %></span>
+    <span class="elementHide" id="mimeType"><%= sharedocument.document.file.content_type %></span>
+  </div>
+<% end %>
+</div>
+<script>
+    new SharedFilesShow();
+</script>

@@ -1,0 +1,38 @@
+
+<h6 class="titleFile"><%= @document.fileName %></h6><br>
+<span class="elementHide" id="idDocument"><%= @document.id %></span>
+<span class="elementHide" id="dateCreate"><%= @document.created_at %></span>
+<img src="" class="imgFile"/>
+<span class="elementHide" id="mimeType"><%= @document.file.content_type %></span>
+<h7>Creado el día: <span id="day"></span></h7><br>
+<h7>Creado a las: <span id="time"></span></h7>
+<hr>
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--6-col mdl-cell--3-col-phone">
+    <label for="finder">Buscar:</label>
+    <input type="text" name="finder"/><br>
+    <span>Cuentas seleccionadas: <span id="contadorSeleccionados">0</span></span><br>
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="btnCompartir">Compartir documento</button>
+  </div>
+  <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-phone" id="divAccounts">
+    <% @accountsBag.each do |account| %>
+      <div class='divContainerAccount mdl-cell mdl-cell--6-col mdl-cell--4-col-phone'>
+        <span><%= account.full_name %></span><br>
+        <span><%= account.email %></span>
+        <span class='elementHide' id='idAccount'><%= account.id %></span>
+      </div>
+    <% end %>
+  </div>
+</div>
+<script>
+    var accounts = [];
+    <% @accountsBag.each do |account| %>
+    var accountTemp = [];
+    accountTemp.push('<%= account.full_name %>');
+    accountTemp.push('<%= account.email %>');
+    accountTemp.push('<%= account.id %>');
+    accounts.push(accountTemp);
+    <% end %>
+    var selectedAccounts = [];
+    new SharedFile();
+</script>

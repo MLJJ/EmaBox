@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta lang="en">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>EMA-Box</title>
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="EMA-Box">
+  <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+  <meta name="msapplication-TileColor" content="#3372DF">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <title>EMA-Box</title>
+  <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag 'application', :media => 'all' %>
+  <%= javascript_include_tag 'application' %>
+</head>
+<body title="EMA-Box">
+<script>
+    if("<%= alert %>" !== ""){
+        alertify.notify('<%= alert %>', 'normal', 3, function(){  console.log('dismissed'); });
+    }
+    if("<%= notice %>" !== ""){
+        alertify.notify('<%= notice %>', 'normal', 3, function(){  console.log('dismissed'); });
+    }
+</script>
+<%- if account_signed_in? %>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+    <!--Primer header-->
+    <header class="mdl-layout__header mdl-color--grey-900 mdl-color-text--grey-300">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <!--<span class="mdl-layout-title">Title</span>-->
+        <!-- Add spacer, to align navigation to the right -->
+        <div class="mdl-layout-spacer"></div>
+
+        <!-- Navigation. We hide it in small screens. -->
+        <nav class="mdl-navigation mdl-layout--large-screen-only mdl-color-text--grey-300" title="Barra de navegación superior">
+          <a class="mdl-navigation__link mdl-color-text--grey-300 tagArchivos" href="<% root_path %>" >Archivos</a>
+          <a class="mdl-navigation__link mdl-color-text--grey-300 tagFirma" >Generar firma</a>
+          <a class="mdl-navigation__link mdl-color-text--grey-300 tagPerfil" href="<%= edit_account_registration_path %>">Perfil</a>
+          <%= link_to 'Salir', destroy_account_session_path, method: :delete, class: "mdl-navigation__link mdl-color-text--grey-300"%>
+        </nav>
+        <!-- Right aligned menu below button -->
+        <div class="mdl-layout--small-screen-only">
+          <button id="menu" class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">more_vert</i>
+          </button>
+          <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="menu">
+            <%= link_to 'Archivos', root_path, class: "mdl-menu__item menuItemLink" %>
+            <%= link_to 'Perfil', edit_account_registration_path, class: "mdl-menu__item menuItemLink" %>
+            <%= link_to 'Salir', destroy_account_session_path, method: :delete, class: "mdl-menu__item menuItemLink"%>
+          </ul>
+        </div>
+
+      </div>
+    </header>
+    <!--Sidebar-->
+    <div class="sidebar mdl-layout__drawer mdl-color--grey-100">
+      <span class="mdl-layout-title mdl-color--grey-900 mdl-color-text--grey-300"><%= link_to("EMA-Box", root_path) %></span>
+      <nav class="mdl-navigation" title="Barra de navegación izquierda">
+        <a class="mdl-navigation__link">
+          <div class="contentInfoAccount">
+            <img src="<%= current_account.picture %>" class="imgPerfil"/>
+            <%= current_account.full_name  %>
+          </div>
+        </a>
+        <%= link_to 'Mis archivos', root_path, class: "mdl-navigation__link navOption", id: "root" %>
+        <%= link_to 'Compartidos conmigo', shared_documents_path, class: "mdl-navigation__link navOption", id: "shared" %>
+        <h4 class="mdl-navigation__link navChat">Chat</h4>
+        <hr class="hrNoMargin">
+        <div class="chatContainer">
+          <% if validation_path_account?(request.env['REQUEST_URI']) %>
+            <ul id="conversations-list">
+              <% @conversations.each do |conversation| %>
+                <%= render 'conversations/conversation', conversation: conversation, user: current_account %>
+              <% end %>
+            </ul>
+            <h4 class="mdl-navigation__link navChat">Contactos</h4>
+            <hr class="hrNoMargin">
+            <div class="panel-body">
+              <ul>
+                <% @accounts.each do |account| %>
+                  <li>
+                    <div class="contacts">
+                      <span><img class="mdl-chip__contact" src="<%= account.picture %>"><%= account.full_name %></span>
+                      <%= link_to image_tag("/message.png"), conversations_path(account_id: account), remote: true, method: :post %>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+            <% else %>
+              <h5>Chat deshabilitado</h5>
+            <% end %>
+        </div>
+    </nav>
+    </div>
+    <!--Contenido-->
+    <main class="mdl-layout__content">
+      <div class="page-content"><!-- Your content goes here -->
+        <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--1-col mdl-cell--1-col-tablet"></div>
+          <div class="mdl-cell mdl-cell--10-col mdl-cell--4-col-phone mdl-cell--6-col-tablet">
+            <%= yield %>
+          </div>
+          <div class="mdl-cell mdl-cell--1-col mdl-cell--1-col-tablet"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+<% else %>
+  <div class="layout-background mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <!--Primer header-->
+    <header class="mdl-layout__header mdl-layout__header--transparent">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">
+        <%= link_to("EMA-Box", root_path) %>
+      </span>
+        <!-- Add spacer, to align navigation to the right -->
+        <div class="mdl-layout-spacer"></div>
+
+        <!-- Navigation. We hide it in small screens. -->
+        <nav class="mdl-navigation mdl-layout--large-screen-only" title="Barra de navegación superior">
+          <%= link_to "Iniciar sesión", new_account_session_path, class: "mdl-navigation__link"%>
+          <%= link_to "Registrarse", new_account_registration_path, class: "mdl-navigation__link"%>
+          <a class="mdl-navigation__link" href="">Acerca de nosotros</a>
+        </nav>
+        <!-- Right aligned menu below button -->
+        <div class="mdl-layout--small-screen-only">
+          <button id="menu" class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">more_vert</i>
+          </button>
+          <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="menu">
+            <li class="mdl-menu__item">
+              <%= link_to "Iniciar sesión", new_account_session_path, class: "menuItemLink"%>
+            </li>
+            <li class="mdl-menu__item">
+              <%= link_to "Registrarse", new_account_registration_path, class: "menuItemLink"%>
+            </li>
+            <li class="mdl-menu__item">Acerca de nosotros</li>
+          </ul>
+        </div>
+
+      </div>
+    </header>
+    <!--Sidebar-->
+    <!--Contenido-->
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <%= yield %>
+      </div>
+    </main>
+  </div>
+<% end %>
+</body>
+</html>

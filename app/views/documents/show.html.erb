@@ -1,0 +1,16 @@
+<% if @document.file.content_type == "application/pdf" %>
+  <iframe src="<%= rails_blob_url(@document.file, disposition: 'preview') %>" height="500px"></iframe>
+<% else if @document.file.content_type != "application/msword" %>
+  <div class="viewerDocxs first">
+    <% @documentHtml.each_with_index do |html, index|  %>
+      <%= html.html_safe %>
+      <% if index % 25 == 0 && index != 0 %>
+        </div>
+        <div class="viewerDocxs">
+      <% end %>
+    <% end %>
+  </div>
+  <% else %>
+    <span>Documento no compatible para la visualización</span>
+<% end %>
+<% end %>

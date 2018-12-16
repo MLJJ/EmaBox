@@ -1,0 +1,17 @@
+<%= form_with model: @document, :url => { :action => :saveDocument, :controller => :documents } do |form| %>
+  <div class="col-md-6 mdl-textfield mdl-js-textfield">
+    <%= form.text_field :title, class: 'mdl-textfield__input', name: 'fileName', id: 'fileName', :required => true%>
+    <%= form.label :title, class: 'mdl-textfield__label', for: 'fileName' %>
+  </div>
+    <%= form.submit 'Guardar como docx',class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent", id: "fileSubmit"%>
+  <button class="mdl-button mdl-js-button mdl-button--raised" type="button" id="exportDocument">Exportar a pdf</button>
+    <div class="col-md-12">
+      <%=
+        form.cktext_area :notes, class: 'document-editor', ckeditor: { language: 'es'}
+        form.cktext_area :info, name: 'documentContent', id: 'documentContent',ckeditor: {toolbar: 'mini' }, class: 'document-editor', :required => true
+      %>
+    </div>
+  <% end %>
+
+
+

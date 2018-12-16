@@ -1,0 +1,58 @@
+<!-- Page home -->
+<%- if !account_signed_in? %>
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet"></div>
+  <div class="mdl-cell mdl-cell--8-col mdl-cell--6-col-tablet mdl-cell--4-col-phone div-welcome-conteiner">
+    <%= image_tag("logo.png", class: "imgLogo") %>
+    <div class="mdl-layout--large-screen-only div-welcome">
+      <h1>¡Hola! Bienvenido a EMA-Box</h1>
+      <h4>¡Somos tu mejor almacenamiento en la nube!</h4>
+    </div>
+    <div class="mdl-layout--small-screen-only div-welcome">
+      <h3>¡Hola! Bienvenido a EMA-Box</h3>
+      <h6>¡Somos tu mejor amacenamiento en la nube!</h6>
+    </div>
+  </div>
+  <div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-tablet"></div>
+</div>
+<% else %>
+  <h3 class="titlePages">Mis archivos</h3>
+  <div id="divContainerFiles" class="mdl-grid">
+    <% @documents.each do |document| %>
+      <div class="divContainerFile mdl-js-button mdl-cell mdl-cell--2-col mdl-cell--1-col-phone" id="<%= document.id %>">
+        <img src="" class="imgFile"/>
+        <h6 class="nameFile"><%= document.fileName %></h6>
+        <span class="elementHide" id="fileId"><%= document.id %></span>
+        <span class="elementHide" id="mimeType"><%= document.file.content_type %></span>
+        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+            for="<%= document.id %>">
+          <li class="mdl-menu__item optionShow">Visualizar</li>
+          <li class="mdl-menu__item mdl-menu__item--full-bleed-divider optionShare">Compartir</li>
+          <li class="mdl-menu__item optionDownload"><%= link_to "Descargar", rails_blob_url(document.file, disposition: "attachment") %></li>
+        </ul>
+      </div>
+    <% end %>
+    <button id="btnAddFile" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored btnAdd">
+      <i class="material-icons">add</i>
+    </button>
+  </div>
+
+  <div id="loadModal" class="elementHide">
+    <%= form_with model: @document, id: "formdocument", :url => {:action => :create, :controller => :documents} do |form| %>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <%= form.label :fileName, "Nombre del archivo:", class: "mdl-textfield__label" %>
+        <%= form.text_field :fileName, autofocus: true, class: "mdl-textfield__input required", id: "fileNameField" %>
+      </div>
+      <div class="input__row uploaderFile">
+        <label for="document_filer"></label>
+        <%= form.file_field :file, class: "upload", id: "document_filer", :required => true %>
+      </div>
+      <br>
+      <%= form.submit "Guardar documento", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent", id: "fileSubmit" %>
+      <div style="padding-top: 30px">
+        <button id="createDocument" class="mdl-button mdl-js-button mdl-button--raised" type="button">Crear documento</button>
+      </div>
+    <% end %>
+  </div>
+  <script>new FilesShow();</script>
+<% end %>
