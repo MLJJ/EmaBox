@@ -19,6 +19,16 @@ Rails.application.configure do
   # `config/secrets.yml.key`.
   config.read_encrypted_secrets = true
 
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+      :port           => ENV['587'],
+      :address        => ENV['smtp.gmail.com'],
+      :user_name      => ENV['ema.boxweb@gmail.com'],
+      :password       => ENV['8221053@gmail'],
+      :domain         => 'mail.google.com', #mydomain actually contains the realvalue
+      :authentication => :login,
+  }
+
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
