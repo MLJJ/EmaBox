@@ -164,7 +164,7 @@ h6.nameFile{
 }
 
 .layout-background {
-    background: url('backgroud.png') center / cover;
+    background: url('/public/backgroud.png') center / cover;
 }
 
 .layout-background .mdl-layout__header, .layout-background .mdl-navigation__link {
