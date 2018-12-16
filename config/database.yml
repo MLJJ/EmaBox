@@ -17,10 +17,10 @@ test:
   password: acdc619mljj
 
 production:
-  adapter: mysql2
-  encoding: utf8
+  adapter: postgresql
   reconnect: false
-  database: emabox
+  host: ec2-54-243-150-10.compute-1.amazonaws.com
+  database: d493n89l8v0512
   pool: 5
-  username: usuarioEMA
-  password: acdc619mljj
+  username: dehsowzjyarlil
+  password: 8b44ff44052166ed81545f93667171e21a946fe8128987ef7ac277f98a67e5c6
