@@ -5,7 +5,7 @@ class Document < ApplicationRecord
   validates :fileName, presence: true
 
   def getAllMyDocuments idAccount
-    Document.find_by_sql(["SELECT  `documents`.* FROM `documents` WHERE `documents`.`account_id` = ?", idAccount])
+    Document.find_by_sql(['SELECT  "documents".* FROM "documents" WHERE "documents"."account_id" = ?', idAccount])
   end
 
   def correct_file nameFile, fileImport
