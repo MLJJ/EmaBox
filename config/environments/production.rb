@@ -21,12 +21,13 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'https://emabox.herokuapp.com'}
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-      :port           => ENV['587'],
-      :address        => ENV['smtp.gmail.com'],
-      :user_name      => ENV['ema.boxweb@gmail.com'],
-      :password       => ENV['8221053@gmail'],
+      :port           => '587',
+      :address        => 'smtp.gmail.com',
+      :user_name      => 'ema.boxweb@gmail.com',
+      :password       => '8221053@gmail',
       :domain         => 'mail.google.com',
       :authentication => :login,
+      :enable_starttls_auto => true
   }
 
   # Disable serving static files from the `/public` folder by default since

@@ -9,7 +9,17 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
-  config.action_mailer.default_url_options = { host: 'https://emabox.herokuapp.com' }
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+      :port           => '587',
+      :address        => 'smtp.gmail.com',
+      :user_name      => 'ema.boxweb@gmail.com',
+      :password       => '8221053@gmail',
+      :domain         => 'mail.google.com',
+      :authentication => :login,
+      :enable_starttls_auto => true
+  }
 
   # Show full error reports.
   config.consider_all_requests_local = true
